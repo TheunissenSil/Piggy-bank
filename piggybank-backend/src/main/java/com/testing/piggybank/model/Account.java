@@ -47,4 +47,9 @@ public class Account {
     public long getUserId() {
         return userId;
     }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
 }

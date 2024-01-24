@@ -26,6 +26,10 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
+    public void saveAccount(Account account) {
+        accountRepository.save(account);
+    }
+
     /**
      * Get specific account information of given account id.
      *

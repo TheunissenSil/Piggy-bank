@@ -70,12 +70,21 @@ public class AccountController {
      * @return http status
      */
     @PutMapping
-    public ResponseEntity<HttpStatus> updateAccount(@RequestBody @Valid final UpdateAccountRequest request) {
-        // TODO: Implement.
-        System.out.println("Update account name: " + request.getAccountName() + " for accountid: " + request.getAccountId());
-
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Object> updateAccount(@RequestBody @Valid final UpdateAccountRequest request) {
+        try {
+            return accountService.getAccount(request.getAccountId())
+                    .map(account -> {
+                        account.setName(request.getAccountName());
+                        accountService.saveAccount(account);
+                        return ResponseEntity.ok().build();
+                    })
+                    .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        } catch (Exception e) {
+            // Log error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
+
 
     private AccountResponse mapAccountToAccountResponse(final Account account) {
         final AccountResponse response = new AccountResponse();
